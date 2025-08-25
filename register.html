@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>P.League FC — Register</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="bg-animated">
+  <header class="nav">
+    <div class="logo">P.<span>League</span> FC</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="details.html">Details</a>
+      <a href="register.html" class="active">Register</a>
+      <a href="teams.html">Teams</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Already registered state -->
+    <div id="already-registered" class="panel warn hidden">
+      <h2>✅ You’re already registered!</h2>
+      <p><strong id="reg-team-name"></strong> is locked in. Duplicate entries aren’t allowed.</p>
+      <div class="cta">
+        <a class="btn outline" href="teams.html">View Registered Teams</a>
+      </div>
+    </div>
+
+    <!-- Registration form + payment -->
+    <section id="reg-section" class="grid-2">
+      <div class="panel lift">
+        <h2 class="mb-sm">Quick Registration</h2>
+        <form id="reg-form" autocomplete="on">
+          <label>Team Name</label>
+          <input required type="text" name="teamName" placeholder="e.g., Kurji Kings"/>
+
+          <label>Captain Name</label>
+          <input required type="text" name="captainName" placeholder="e.g., A. Kumar"/>
+
+          <label>Phone (10 digits)</label>
+          <input required pattern="[0-9]{10}" maxlength="10" name="phone" placeholder="e.g., 9876543210"/>
+
+          <label>Email</label>
+          <input required type="email" name="email" placeholder="e.g., team@example.com"/>
+
+          <label>No. of Players (7–11)</label>
+          <input required type="number" min="7" max="11" name="playersCount" placeholder="e.g., 9"/>
+
+          <small class="muted">You can still fill the Google Form as a backup below.</small>
+
+          <div class="cta">
+            <button type="button" id="pay-button" class="btn glow">Pay ₹2899 via Razorpay</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel lift">
+        <h2>Google Form (Backup)</h2>
+        <iframe src="https://forms.gle/pZDdSLMv9cp8Q9XGA" width="100%" height="560" frameborder="0" style="border-radius:16px;"></iframe>
+      </div>
+    </section>
+
+    <section class="panel info">
+      <h3>Payment notes</h3>
+      <ul class="bullets">
+        <li>Amount: ₹2,899 (Razorpay) — includes payment gateway adjustments.</li>
+        <li>After payment you’ll be redirected and your team will auto-appear in the Registered Teams list.</li>
+        <li>WhatsApp + Email confirmation will be sent to the captain.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>📞 <a href="tel:+917061908614">7061908614</a></div>
+    <div>📸 <a target="_blank" href="https://www.instagram.com/p.leaguefc?igsh=ZnRiNmw2NDcxbThr">Instagram</a></div>
+  </footer>
+</body>
+</html>

@@ -23,7 +23,7 @@ function initRegister(){
     return;
   }
 
-  const payBtn = qs("#pay-button");
+  const payBtn = qs("#pay-button clicked");
   const form = qs("#reg-form");
 
   payBtn?.addEventListener("click", async () => {
@@ -99,4 +99,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if(location.pathname.endsWith("thanks.html")) initThanks();
   if(location.pathname.endsWith("teams.html")) initTeams();
 });
+
 

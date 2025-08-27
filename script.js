@@ -1,6 +1,6 @@
 /* ====== CONFIG ====== */
 const API_BASE = "https://patnaleaguefc-backend.onrender.com"; // <-- your backend URL
-const CASHFREE_APP_ID = "YOUR_CASHFREE_APP_ID"; // <-- from Cashfree Dashboard (sandbox/live)
+const CASHFREE_APP_ID = "Y10596692b0e8913b99285e2b56e9669501"; // <-- from Cashfree Dashboard (sandbox/live)
 
 /* ====== UTIL ====== */
 function qs(sel, root=document){ return root.querySelector(sel); }
@@ -99,3 +99,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if(location.pathname.endsWith("thanks.html")) initThanks();
   if(location.pathname.endsWith("teams.html")) initTeams();
 });
+

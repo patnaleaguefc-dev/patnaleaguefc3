@@ -1,6 +1,6 @@
 /* ====== CONFIG ====== */
-const API_BASE = "https://patnaleaguefc-backend.onrender.com"; // <-- change to your backend URL
-const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID";      // <-- from Razorpay Dashboard
+const API_BASE = "https://patnaleaguefc-backend.onrender.com"; // <-- your backend URL
+const CASHFREE_APP_ID = "YOUR_CASHFREE_APP_ID"; // <-- from Cashfree Dashboard (sandbox/live)
 
 /* ====== UTIL ====== */
 function qs(sel, root=document){ return root.querySelector(sel); }
@@ -17,7 +17,6 @@ function initRegister(){
 
   const saved = getLocal("plfc_registration");
   if(saved?.teamName){
-    // lock the page if already registered
     nameOut.textContent = saved.teamName;
     already.classList.remove("hidden");
     regSection.classList.add("hidden");
@@ -42,13 +41,13 @@ function initRegister(){
       return;
     }
 
-    // create order on backend
+    // create order on backend (Cashfree)
     let orderRes;
     try{
       const res = await fetch(`${API_BASE}/api/order`, {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ amount: 289900, team })
+        body: JSON.stringify({ amount: 2899, team }) // Cashfree takes INR in rupees, not paise
       });
       orderRes = await res.json();
       if(!res.ok) throw new Error(orderRes?.message || "Order creation failed");
@@ -58,43 +57,12 @@ function initRegister(){
       return;
     }
 
-    const options = {
-      key: RAZORPAY_KEY_ID,
-      amount: orderRes.amount,
-      currency: "INR",
-      name: "P.League FC",
-      description: "Team Registration",
-      order_id: orderRes.orderId,
-      theme: { color: "#7AF8C6" },
-      handler: async function (response){
-        // verify payment on backend + save to DB + send notifications
-        try{
-          const verifyRes = await fetch(`${API_BASE}/api/verify`, {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              team
-            })
-          });
-          const data = await verifyRes.json();
-          if(!verifyRes.ok) throw new Error(data?.message || "Verification failed");
-
-          // saved
-          setLocal("plfc_registration", { teamName: data.team.teamName, code: data.team.code, at: Date.now() });
-          location.href = `thanks.html?team=${encodeURIComponent(data.team.teamName)}&code=${encodeURIComponent(data.team.code)}`;
-        }catch(err){
-          console.error(err);
-          alert("Payment verified but saving failed. Please contact the organizer.");
-        }
-      },
-      modal: { ondismiss: function(){ /* user closed */ } },
-      prefill: { name: team.captainName, email: team.email, contact: `+91${team.phone}` }
-    };
-    const rzp = new Razorpay(options);
-    rzp.open();
+    // invoke Cashfree checkout
+    const cashfree = new Cashfree({ mode: "sandbox" }); // use "production" when live
+    cashfree.checkout({
+      paymentSessionId: orderRes.paymentSessionId, // comes from backend
+      redirectTarget: "_self" // open in same window
+    });
   });
 }
 
